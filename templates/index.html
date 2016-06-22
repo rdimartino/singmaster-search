@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{{ title }}</title>
+    <!-- Bootstrap core CSS -->
+    <link href="http://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles.css') }}" type="text/css">
+</head>
+<body data-spy="scroll" data-target=".navbar" data-offset="50">
+<!-- Modal -->
+<div id="dataConfirmModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h4 class="modal-title">Please Confirm</h4>
+            </div>
+            <div class="modal-body">
+                This is the body, the body of the button
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <a class="btn btn-primary btn-danger" data-dismiss="modal" id="dataConfirmOK">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Fixed navbar -->
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">{{ title }}</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#progress">Progress</a></li>
+                <li><a href="#controls">Controls</a></li>
+                <li><a href="#terminal-section">Terminal</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Visualizations<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#viz" class="js-nav-panel" data-target="#viz01">Search Times</a></li>
+                        <li><a href="#viz" class="js-nav-panel" data-target="#viz02">Match Counts</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div>
+</nav>
+<!-- Begin page content -->
+<div class="container">
+    <div class="page-header">
+        <h1>Searching for Odd Multiplicities</h1>
+    </div>
+    <div id="about" class="section">
+        <div class="panel panel-default">
+            <div class="panel-heading">Project Description</div>
+            <div class="panel-body">
+                <p class="lead">
+                    From Wikipedia, <a href="https://en.wikipedia.org/wiki/Singmaster%27s_conjecture">Singmaster's conjecture</a>
+                    says that there is a finite upper bound on the multiplicities of entries in
+                    <a href="https://en.wikipedia.org/wiki/Pascal%27s_triangle">Pascal's triangle</a>.
+                    But there appears to be an
+                    <a href="https://en.wikipedia.org/wiki/Singmaster%27s_conjecture#Do_any_numbers_appear_exactly_five_or_seven_times.3F">open question</a>
+                    about whether any numbers have odd multiplicities greater than 3.
+                </p>
+                <div id="about-collapsed" class="collapse">
+                    <p>
+                        I've whipped up a little Python script to search for numbers with odd multiplicities (I honestly
+                        spent more time writing this stupid <a href="http://flask.pocoo.org/">Flask</a> app (jk, Flask
+                        is pretty sweet) than writing the relevant math-y stuff). I start by calculating the entries that
+                        appear down the center of Pascal's triangle, then I search for that central number in each of the
+                        relevant diagonals. I don't search the first diagonal (all '1's), the second (the natural numbers),
+                        or any diagonal greater than or equal to the one containing the current center target (the center
+                        appears in it's diagonal and then never again further down the Triangle). Due to the symmetry of
+                        Pascal's triangle, if I find the central number in one of the searched diagonals, the multiplicity of
+                        that number is guaranteed to have a multiplicity of at least 5 (1 in the center, 2 in the second
+                        diagonal, and 2 in the found diagonal).
+                    </p>
+                    <p>
+                        The progress of the search is running below...
+                    </p>
+                </div>
+                <a id="about-more" class="text-muted" href="#about-collapsed" data-toggle="collapse">Read more...</a>
+            </div>
+        </div>
+    </div>
+    <div id="progress" class="section">
+        <div class="panel panel-default">
+            <div class="panel-heading">Current Progress</div>
+            <div class="panel-body">
+                <div class="row">
+                    <!--Progress bar-->
+                    <div class="col-xs-12">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="{{ progress }}"
+                                 aria-valuemin="0" aria-valuemax="100" style="width:{{ progress }}%">
+                                <span class="progress-label">Center: {{ progress['center'] }} - ({{ progress['p'] }}% complete)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Buttons-->
+    <div id="controls" class="section">
+        <div class="panel panel-default">
+            <div class="panel-heading">Controls</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-4 text-center">
+                        <a id="start-btn" data-btn-state="{{ buttons['start-btn']['state']}}" class="js-control btn btn-success disabled" role="button" href="/start">
+                            Start
+                        </a>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                        <a id="stop-btn" data-btn-state="{{ buttons['stop-btn']['state']}}" class="js-control btn btn-warning disabled" role="button" href="/stop">
+                            Pause
+                        </a>
+                    </div>
+                    <div class="col-xs-4 text-center">
+                        <a id="reset-btn" data-btn-state="{{ buttons['reset-btn']['state']}}" data-toggle="modal" data-target="#dataConfirmModal" data-modal-msg="Do you want to reset all search results?" class="js-control js-confirm btn btn-danger disabled" role="button" href="/reset">
+                            Reset
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="terminal-section" class="section">
+        <div class="panel panel-default">
+            <div class="panel-heading">Status Terminal</div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div id="terminal">
+                            <pre>{{terminal_text}}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="viz" class="section">
+        <div class="panel panel-default">
+            <div class="panel-heading">Visualizations</div>
+            <div class="panel-body">
+                <ul class="nav nav-tabs">
+                    <li role="presentation"><a href="#viz01" data-toggle="tab">Search Times</a></li>
+                    <li role="presentation"><a href="#viz02" data-toggle="tab">Match Counts</a></li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active fade" id="viz01">
+                         <div class="chart"></div>
+                        <p>Plotting the time to search for the n-th center.
+                            You can zoom and pan with the mouse.
+                            When zoomed in enough, individual results will appear.
+                            When clicked, a pop-over will reveal more details.
+                            Look for green or red circles which indicate matches found or missed.
+                        </p>
+                    </div>
+                    <div class="tab-pane fade" id="viz02">
+                        <div class="chart"></div>
+                        <p>Histogram of the number of matches found when searching for a center.
+                            All centers should have at least one match. A count of zero means
+                            that the program failed. A count greater than one is a success.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="footer">
+    <div class="container">
+        <p class="text-muted">&copy; Robert DiMartino {{ year }}</p>
+    </div>
+</footer>
+<div class="row alert-row">
+    <div class="col-sm-3"></div>
+    <div id="alert_holder" class="col-sm-6"></div>
+    <div class="col-sm-3"></div>
+</div>
+<script type="text/javascript" src="{{ url_for('static',filename='scripts.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='viz.js') }}"></script>
+</body>
+</html>

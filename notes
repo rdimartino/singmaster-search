@@ -1,0 +1,28 @@
+# 6/22/2016
+Things to fix/update:
+* Still need a comprehensive refactoring of the code
+** Reorganize the javascript codes/css styles
+** Add comments to all of code
+//** Make sure that controls and presentation, etc. are separate #I think I did this
+* Python fixes
+//** Update the thread counter on restart? #Skipping
+** Clean up python, conform to PEP8
+** Do the buttons need a fixed implementation?
+** Get flask to run as fcgi
+** Check that the functions are able to run
+** Startup script for FCGI for server
+** Fix the terminate command
+** Upgrades
+*** Do I really need a Pascal object?
+* Javascript fixes
+** Catch connection error for status stream #Don't think it's possible to distinguish between errors, build error counter and reset errors to zero on successful events
+** Check web performance (looks for lagging in javascript anywhere)
+//** The viz file should be the only one modifying the data (i.e. "fixing" zeroes for the logarithmic plots)
+** Possible upgrades:
+*** Dynamically sized SVG for charts
+*** Make chart match bootstrap colors
+*** Debug mode
+* HTML
+** Clean up the chart descriptions
+** Revise the "read more" content
+* Put project on github when completed
