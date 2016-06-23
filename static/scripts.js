@@ -10,7 +10,7 @@ $(document).ready(function() {
     setButtons();
     $('.nav-tabs a[href="#viz01"]').tab("show");
     $.ajax({
-        url: "/reload",
+        url: "./reload",
         beforeSend: function() {
             $("#terminal > pre").html("");
             $(`<div class="spinner"></div>`).appendTo($("#terminal").css("position", "relative"));
@@ -175,7 +175,7 @@ var viz_data = [{x: 2, y:0.0001, m:1}];
 
 function openSteam() {
     console.log("Opening status stream")
-    stream_source = new EventSource("/dataStream");
+    stream_source = new EventSource("./dataStream");
     stream_source.addEventListener("close", closeStream, false);
     stream_source.addEventListener("progress", updateProgress, false);
     stream_source.addEventListener("data", function(e) {

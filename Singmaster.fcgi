@@ -3,4 +3,4 @@ from flup.server.fcgi import WSGIServer
 from app import app
 
 if __name__ == '__main__':
-    WSGIServer(app, bindAddress='/path/to/fcgi.sock').run()
+    WSGIServer(app, bindAddress='/tmp/singmaster-fcgi.sock').run()

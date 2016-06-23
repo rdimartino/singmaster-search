@@ -1,0 +1,11 @@
+#nginx configuration
+location = /singmaster-search { rewrite ^ /singmaster-search/ last; }
+location /singmaster-search { try_files $uri @singmaster-search; }
+location @singmaster-search {
+    include fastcgi_params;
+    fastcgi_split_path_info ^(/singmaster-search)(.*)$;
+    fastcgi_param PATH_INFO $fastcgi_path_info;
+    fastcgi_param SCRIPT_NAME $fastcgi_script_name;
+    fastcgi_pass unix:/var/run/singmaster-fcgi.sock;
+}
+
