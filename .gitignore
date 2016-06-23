@@ -1,2 +1,4 @@
 old/**
-*.pyc.idea/**
+.idea/**
+*.pyc
+
