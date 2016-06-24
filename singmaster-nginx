@@ -7,5 +7,6 @@ location @singmaster-search {
     fastcgi_param PATH_INFO $fastcgi_path_info;
     fastcgi_param SCRIPT_NAME $fastcgi_script_name;
     fastcgi_pass unix:/var/run/singmaster-fcgi.sock;
+    fastcgi_read_timeout 300s;
 }
 
