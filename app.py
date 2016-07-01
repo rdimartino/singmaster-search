@@ -255,6 +255,11 @@ def shutdown():
     return 'Server shutting down...'
 
 
+@app.route('/initalize_test')
+def initial():
+    return str(process['initial']['lastCenterIndex'])+'--'+str(db.resumeSearch()['lastCenterIndex'])
+
+
 if __name__ == "__main__":
     app.debug = True
     #db.recreateTables()
