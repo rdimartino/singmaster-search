@@ -260,7 +260,7 @@ if __name__ == "__main__":
     #db.recreateTables()
     #db.createLog()
     process['initial'] = db.resumeSearch()
-    progress.update({'center': 'lastCenterIndex'})
+    progress.update({'center': process['initial']['lastCenterIndex']})
     app.run(threaded=True, use_reloader=False)
 
 @atexit.register
