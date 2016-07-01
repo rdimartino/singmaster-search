@@ -85,6 +85,8 @@ subscriptions = []
 buttons = {'start-btn': {'state': True},
            'stop-btn': {'state': False},
            'reset-btn': {'state': False}}
+process['initial'] = db.resumeSearch()
+progress.update({'center': process['initial']['lastCenterIndex']})
 
 
 def searchProcess():
@@ -257,15 +259,14 @@ def shutdown():
 
 @app.route('/initalize_test')
 def initial():
-    return str(process['initial']['lastCenterIndex'])+'--'+str(db.resumeSearch()['lastCenterIndex'])
+    #return str(db.resumeSearch()['lastCenterIndex'])
+    return str(type(process))
 
 
 if __name__ == "__main__":
     app.debug = True
     #db.recreateTables()
     #db.createLog()
-    process['initial'] = db.resumeSearch()
-    progress.update({'center': process['initial']['lastCenterIndex']})
     app.run(threaded=True, use_reloader=False)
 
 @atexit.register
