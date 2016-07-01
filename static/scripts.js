@@ -199,6 +199,7 @@ function openSteam() {
 function closeStream() {
     console.log("Closing status stream");
     stream_source.close();
+    viz_data = [{x: 2, y:0.0001, m:1}];
 };
 
 function terminalStatus(status) {
