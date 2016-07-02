@@ -121,22 +121,30 @@ rect {
 }
 
 rect.bar {
-  fill: steelblue;
+  fill: #337ab7; /*bootstrap-primary*/
   stroke: black;
 }
 
 circle {
   stroke: black;
+  fill:  #5bc0de; /*bootstrap info*/
   stroke-width: 1;
 }
 
+circle.viz-success {
+    fill: #5cb85c; /*bootstrap success*/
+}
+
+circle.viz-warning {
+    fill: #f0ad4e; /*bootstrap warning*/
+}
+
 circle.viz-active {
-  stroke: black;
-  fill: black;
+  fill: #337ab7; /*bootstrap-primary*/
 }
 
 path {
-  stroke: lightblue;
+  stroke: #5bc0de; /*bootstrap info*/
   stroke-width: 2;
   fill: none;
 }

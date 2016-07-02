@@ -133,16 +133,16 @@ function lineChart() {
     scatter.enter()
       .append("circle")
       .attr("r", 5)
-      .attr("fill", function(d) {
-        var color;
+      .attr("class", function(d) {
+        var colorClass;
         if (d.m < 1) {
-          color = "red";
+          colorClass = "viz-warning";
         } else if (d.m > 1) {
-          color = "green";
+          color = "viz-success";
         } else {
-          color = "blue";
+          color = "";
         }
-        return color;
+        return colorClass;
       })
       .attr("title", function(d) {return "Center: "+d.x.toString();})
       .attr("data-content",function(d) {return "Time: "+d.y.toFixed(5).toString()+
